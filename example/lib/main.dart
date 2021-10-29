@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:update_app/bean/download_process.dart';
+import 'package:update_app_k/bean/download_process.dart';
 
-import 'package:update_app/update_app.dart';
+import 'package:update_app_k/update_app.dart';
 
 void main() => runApp(MyApp());
 
@@ -88,9 +88,9 @@ class _MyAppState extends State<MyApp> {
 
   void download() async {
     var downloadId = await UpdateApp.updateApp(
-        url:
-            "https://raw.githubusercontent.com/mofada/flutter_update_app/master/apks/app-release.apk",
-        appleId: "375380948");
+        url: "https://raw.githubusercontent.com/mofada/flutter_update_app/master/apks/app-release.apk",
+        appleStoreUrl: "https://apps.apple.com/cn/app/id375380948",
+      );
 
     //本地已有一样的apk, 下载成功
     if (downloadId == 0) {

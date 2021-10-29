@@ -16,6 +16,6 @@ class ArgumentName {
   ///通知栏标题
   static const String downloadId = "argumentDownloadId";
 
-  ///苹果商店id
-  static const String appleId = "appleId";
+  ///苹果商店url
+  static const String appleStoreUrl = "appleStoreUrl";
 }

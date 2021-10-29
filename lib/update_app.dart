@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:update_app/bean/download_process.dart';
-import 'package:update_app/constant/argument_name.dart';
-import 'package:update_app/constant/channel_name.dart';
+import 'package:update_app_k/bean/download_process.dart';
+import 'package:update_app_k/constant/argument_name.dart';
+import 'package:update_app_k/constant/channel_name.dart';
 
 class UpdateApp {
   static const MethodChannel _channel =
@@ -16,7 +16,9 @@ class UpdateApp {
 
   /// Download the app and update
   ///
+  /// appleUrl: This is the app store url of the app store, used to jump to the app store
   /// appleId: This is the app id of the app store, used to jump to the app store
+  /// locale: This is the app store locale of the app store, used to jump to the app store with [appleId]. delfult is 'cn'.
   /// url: This is the URL to download the apk file
   /// title: Android download the title displayed in the notification bar, generally use the file name, or like this `update version 1.6`
   /// description: Android download the description displayed in the notification bar, similar to the subtitle
@@ -24,7 +26,7 @@ class UpdateApp {
   /// @return `-1` -> `download failed`, `0` -> `There is a current apk locally, and the download is successful`, other (int) -> `downloadId`
   static Future<int> updateApp({
     required String url,
-    required String appleId,
+    required String appleStoreUrl,
     String? title,
     String description = "应用更新",
   }) async {
@@ -32,8 +34,11 @@ class UpdateApp {
       ArgumentName.url: url,
       ArgumentName.title: title ?? appName(url),
       ArgumentName.description: description,
-      ArgumentName.appleId: appleId
+      ArgumentName.appleStoreUrl: appleStoreUrl,
     });
+    if(result is! int){
+      throw result;
+    }
     return result;
   }
 

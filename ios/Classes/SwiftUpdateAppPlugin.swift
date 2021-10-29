@@ -2,11 +2,9 @@ import Flutter
 import UIKit
 
 public class SwiftUpdateAppPlugin: NSObject, FlutterPlugin {
-    //Apple Store Link
-    let appStoreLink = "https://itunes.apple.com/us/app/apple-store/id%@?mt=8"
 
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "cn.mofada.update_app", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: "mofada.cn/update_app", binaryMessenger: registrar.messenger())
         let instance = SwiftUpdateAppPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
@@ -28,24 +26,27 @@ public class SwiftUpdateAppPlugin: NSObject, FlutterPlugin {
     // 跳转Apple Store
     func goAppStore(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments else {
+            result("arguments is empty")
             return
         }
 
-        if let arguments = args as? [String: Any],
-           //获取Apple ID
-           let appleId = arguments["appleId"] as? String {
-            //拼接地址
-            let appStoreUrl = URL(string: String(format: appStoreLink, appleId))
-            if let url = appStoreUrl, UIApplication.shared.canOpenURL(url) {
-                if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(url, options: [:])
+        if let arguments = args as? [String: Any]{
+            if let appleStoreUrl = arguments["appleStoreUrl"] as? String{
+                if let url = URL(string: appleStoreUrl) ,UIApplication.shared.canOpenURL(url) {
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(url, options: [:])
+                    } else {
+                        UIApplication.shared.openURL(url)
+                    }
+                    result(0)
                 } else {
-                    UIApplication.shared.openURL(url)
+                    result("ios can't open app store page")
                 }
+            } else {
+                result("appleStoreUrl is empty")
             }
-            result(true)
         } else {
-            result(false)
+            result("arguments type not correct")
         }
     }
 }
